@@ -19,9 +19,9 @@ export default function App( ) {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-          {/* <Stack.Screen name="SplashScreen" component={SplashScreen} />
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Menu" component={Menu} /> */}
+          <Stack.Screen name="Menu" component={Menu} />
           <Stack.Screen name="Camera" component={CameraPage} />
           <Stack.Screen name="Check" component={Check}/>
           <Stack.Screen name="NewPlayer" component={NewPlayer}/>

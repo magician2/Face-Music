@@ -55,14 +55,14 @@ export default function CameraPage() {
             kao.shift()
             kao.push('happyFace')
             
-            return <Text style={{color: 'white' ,fontSize:30}}>Happy</Text>
+            return <Text style={{color: 'white' ,fontSize:30}} key={'indexhappy'}>Happy</Text>
 
           }
           else{
             kao.shift()
             kao.push('sadFace')
 
-            return  <Text style={{color: 'white' ,fontSize:30}}>Sad</Text>
+            return  <Text style={{color: 'white' ,fontSize:30}} key={'indexsad'}>Sad</Text>
           }
       });
     }
@@ -71,8 +71,6 @@ export default function CameraPage() {
   const handleFacesDetected = ({ faces }) => {
     setFaceData(faces);
 
-
-    console.log(faces);
     //Face x,y and decoration
 
   }
