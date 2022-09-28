@@ -58,7 +58,7 @@ const newData = SelectAudio.concat(AudioList)
 //重なったデータをspliceで抽出する　ーーーそうすると中には選択されたデータが消える
 newData.map((val,i)=>{
   if(val === SelectAudio[0]){
-    newData.splice(i,1)
+    newData.splice(i,2)
   }
 })
  newData.unshift(SelectAudio[0]);
@@ -121,7 +121,7 @@ useEffect(() => {
 
 		try {
 			const playbackobj = await sound.current
-
+      console.log(currentIndex);
 			const source = {
 				uri: demo().uri
 			}
