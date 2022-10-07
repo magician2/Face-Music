@@ -18,7 +18,7 @@ export default function Menu (){
     const height = Dimensions.get('window').height;
     const width = Dimensions.get('window').width;
     return (
-        <SafeAreaView style= {{flex:1}}>
+        <View style= {{flex:1}}>
              <LinearGradient
                 start={{x: 0, y: 0.2}} end={{x: 0, y: 1}}
                 // Background Linear Gradient
@@ -37,7 +37,7 @@ export default function Menu (){
                         <Image source={tip}></Image>
                     </TouchableOpacity>
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     )
 }   
 const height = Dimensions.get('window').height;

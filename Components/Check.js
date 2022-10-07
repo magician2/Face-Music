@@ -28,10 +28,12 @@ export default function Menu () {
         }
     }
 
-    const sendPlayList =(audio)=>{
-        const SelectAudio = []
-        SelectAudio.push(audio)
-        navigation.navigate('NewPlayer',{SelectAudio,AudioList :FaceDetector()})
+    const sendPlayList =(item)=>{
+        const SelectIndex = FaceDetector().findIndex(function(i){
+            return i.title == item.title
+          })
+          console.log(SelectIndex);
+        navigation.navigate('NewPlayer',{SelectIndex,AudioList :FaceDetector()})
     }
 
     
@@ -39,8 +41,9 @@ export default function Menu () {
         if(route.params.face == 'sadFace'){
             
             return (
-            <View>
-                <Image source={sadp} style={styles.faceIcon}></Image>
+            <View style={{position: 'absolute',top:140,right:100}}>
+
+                <Image source={sadp} style={styles.faceIconSad}></Image>
                 
             </View>
             )
@@ -49,8 +52,9 @@ export default function Menu () {
             
             return (
                 
-            <View style={{position: 'absolute',top:50}}>
+            <View style={{position: 'absolute',top:100}}>
                 <Image source={happyp} style={styles.faceIconHappy}></Image>
+                <Image source={happyp} style={styles.faceIconHappy2}></Image>
             </View>
             )
         }
@@ -58,7 +62,7 @@ export default function Menu () {
 
 
     return (
-        <SafeAreaView
+        <View
         style= {{flex:1}}>
 
             <LinearGradient
@@ -76,12 +80,12 @@ export default function Menu () {
             style={{flex:1,alignItems: 'center'}}>
 
             <TouchableOpacity  
-            style={{width:80,height:20,position:'absolute',top:80,left:20}} 
+            style={{width:90,height:20,position:'absolute',top:80,left:20}} 
             onPress={()=>{navigation.navigate("Menu")}}>
                 <Text style={{color:'white'}}>ホームへ戻る</Text>
             </TouchableOpacity>
             
-            {route.params.image ? <Image source={{ uri: route.params.image }} style={{width:161,height:161,borderRadius:400,marginTop:90}}/> : null}
+            {route.params.image ? <Image source={{ uri: route.params.image }} style={{width:161,height:161,borderRadius:400,marginTop:150}}/> : null}
             {img()}
                 <Text style={styles.decoration}>あなたの表情のカテゴリー :{route.params.face}</Text>
                 <View style={styles.box}>
@@ -111,7 +115,7 @@ export default function Menu () {
                     </TouchableOpacity> */}
                 </View>
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     )
 }   
 const height = Dimensions.get('window').height;
@@ -139,17 +143,24 @@ const styles = StyleSheet.create({
         fontSize:16,
         fontWeight:'bold',
     },
-    faceIcon:{
+    faceIconSad:{
         width:30,
         height:50,
-        position:'absolute',
-        left:60,
-        bottom:80
     },
     faceIconHappy:{
-        width:200,
-        height:200,
-        
+        width:60,
+        height:55,
+        position: 'absolute',
+        left:30,
+        top:30
+    },
+    faceIconHappy2:{
+        width:60,
+        height:55,
+        position: 'absolute',
+        top:160,
+        right:30
+
     },
     image: {
         width:173,

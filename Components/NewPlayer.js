@@ -1,10 +1,11 @@
 import  React,{ useEffect, useRef, useState} from 'react';
 import { Text, View, StyleSheet, Button ,Image,Dimensions,ImageBackground} from 'react-native';
 import { Audio } from 'expo-av';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Slider from '@react-native-community/slider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons ,Entypo, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Back from '../assets/back.png';
@@ -12,34 +13,45 @@ import Back from '../assets/back.png';
 
 
 
-const convertTime = minutes => {
-  if (minutes) {
-    const hrs = minutes / 60;
-    const minute = hrs.toString().split('.')[0];
-    const percent = parseInt(hrs.toString().split('.')[1].slice(0, 2));
-    const sec = Math.ceil((60 * percent) / 100);
-    if (parseInt(minute) < 10 && sec < 10) {
-      return `0${minute}:0${sec}`;
-    }
-
-    if (sec == 60) {
-      return `${minute + 1}:00`;
-    }
-
-    if (parseInt(minute) < 10) {
-      return `0${minute}:${sec}`;
-    }
-
-    if (sec < 10) {
-      return `${minute}:0${sec}`;
-    }
-
-    return `${minute}:${sec}`;
+const convertTime = value => {
+  
+  var secondTime = parseInt(value);// 秒
+  var minuteTime = 0;// 分
+  var hourTime = 0;// 小时
+  if(secondTime > 60) {//如果秒数大于60，将秒数转换成整数
+      //获取分钟，除以60取整数，得到整数分钟
+      minuteTime = parseInt(secondTime / 60);
+      //获取秒数，秒数取佘，得到整数秒数
+      secondTime = parseInt(secondTime % 60);
+      //如果分钟大于60，将分钟转换成小时
+      if(minuteTime > 60) {
+          //获取小时，获取分钟除以60，得到整数小时
+          hourTime = parseInt(minuteTime / 60);
+          //获取小时后取佘的分，获取分钟除以60取佘的分
+          minuteTime = parseInt(minuteTime % 60);
+      }
   }
-};
+
+  var time =  '00 : ' + parseInt(secondTime);
+  if(parseInt(secondTime) < 10){
+    time = '00 : ' + '0' + parseInt(secondTime)
+  }
 
 
+  if(minuteTime > 0 && secondTime < 10) {
+    time = "0" + parseInt(minuteTime) + " : 0" + parseInt(secondTime);
+  }
+  else if(minuteTime > 0){
+    time = "0" + parseInt(minuteTime) + " : " + parseInt(secondTime);
+  }
+  if(hourTime > 0) {
+    time = "" + parseInt(hourTime) + ":" + parseInt(secondTime);
+  }
+  return time;
 
+        }
+      
+    
 
 
 
@@ -47,30 +59,14 @@ export default function NewPlayer() {
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
-
+const navigation = useNavigation()
 const route = useRoute()
-const SelectAudio = route.params.SelectAudio
+const SelectIndex = route.params.SelectIndex
 const AudioList  = route.params.AudioList
 
-//選択されたデータとsongDataと合わせる  (しかしそれだと本来songDataの中に入っていたデータと重ねるものがある)
-const newData = SelectAudio.concat(AudioList)
-
-//重なったデータをspliceで抽出する　ーーーそうすると中には選択されたデータが消える
-newData.map((val,i)=>{
-  if(val === SelectAudio[0]){
-    newData.splice(i,2)
-  }
-})
- newData.unshift(SelectAudio[0]);
-
-console.log( 'NewData  :',newData);
-
-console.log('Select   :',SelectAudio[0]);
-
-//最後また抽出されたデータと　選択されたデータrを合わせて新たなListとして利用する
 
 
-const [currentIndex,setcurrentIndex] = useState(0)
+const [currentIndex,setcurrentIndex] = useState(SelectIndex)
 const [isPlaying,setisPlaying] = useState(true)
 const [soundObj,setsoundObj] = useState(null)
 const [playbackInstance,setPlaybackInstance] = useState(null)
@@ -107,11 +103,10 @@ useEffect(() => {
      
   //   setsoundObj(status)
   // };
-
   const demo = ()=>{
 
-       return newData[currentRef.current]
-     
+       return AudioList[currentRef.current]
+
     }
   
 
@@ -121,21 +116,23 @@ useEffect(() => {
 
 		try {
 			const playbackobj = await sound.current
-      console.log(currentIndex);
+      console.log('currentIndex',currentIndex);
 			const source = {
 				uri: demo().uri
 			}
-      console.log(demo().uri);
+      console.log('uri:',demo().uri);
 			const status = {
 				shouldPlay: isPlaying,
 				volume: volume,
 			}
-     
+      
 			playbackobj.setOnPlaybackStatusUpdate((status) => {onPlaybackStatusUpdate(status)});
       
-			const data = await playbackobj.loadAsync(source, status, false)
+			const data = await playbackobj.loadAsync(source, status, true)
+
+      console.log(data);
       setPlaybackInstance()
-      setsoundObj(data)
+      setsoundObj(playbackobj)
       setIsBuffering(data.isBuffering)
       console.log('Load RefC: ',currentRef.current);
       console.log('play Success');
@@ -156,9 +153,8 @@ const onPlaybackStatusUpdate = (status) => {
     setPlaybackPosition(status.positionMillis)
     setsoundObj(status)
   }
-  
 }
-
+console.log(playbackPosition,duration);
 	const 	calculateSeedBar = () =>{
 
 		if(playbackPosition !== null && duration !== null){
@@ -225,8 +221,8 @@ const img = demo().imageSource
 
 
 return (
-  <SafeAreaView
-  style= {{flex:1,backgroundColor: 'white'}}>
+  <View
+  style= {{flex:1,}}>
 
       <LinearGradient
           start={{x: 0, y: 0.2}} end={{x: 0, y: 1}}
@@ -244,9 +240,7 @@ return (
 
 
     <View style={styles.container}>
-    <TouchableOpacity style={{marginBottom:20,marginLeft:30,}}>
-      <Text style={{fontSize: 15,color: '#727272',fontWeight: 'bold'}}>閉じる</Text>
-    </TouchableOpacity>
+
     <View key="{item}" style={styles.playerBox}>
             {img ? <Image source={{uri: img}} style={styles.playerImage}/> : null}
             <Text style={styles.playerTitle}>{demo().title}</Text>
@@ -263,10 +257,10 @@ return (
             minimumValue={0}
             maximumValue={1}
             value={calculateSeedBar()}
-            onValueChange ={value =>{
-              const dd = convertTime(value * duration / 1000)
-              setCurrentPosition(dd)
-            }}
+            // onValueChange ={value =>{
+            //   const dd = convertTime(value * duration / 1000)
+            //   setCurrentPosition(dd)
+            // }}
             onSlidingStart = {
               async ()=>{
                 if(!isPlaying) return
@@ -283,8 +277,9 @@ return (
 
             />
           <View style={{flexDirection:'row',justifyContent: 'space-between',width:'90%',marginTop:10}}>
+          <Text>{convertTime(playbackPosition/1000)}</Text>
+
             <Text>{convertTime(duration/1000)}</Text>
-            <Text>{convertTime(playbackPosition/1000)}</Text>
           </View>
       </View>
 
@@ -292,17 +287,17 @@ return (
 
       <View style={styles.controls}>
       <TouchableOpacity style={styles.control} onPress={()=>handlePreviousTrack()}>
-                <Text>Back</Text>
+      <AntDesign name="stepbackward" size={40} color="gray" />
             </TouchableOpacity>
           <TouchableOpacity style={styles.control} onPress={()=>handlePlayPause()}>
               {isPlaying ? (
-                <Ionicons name='ios-pause' size={60} color='#111' />
+                <Ionicons name='ios-pause' size={60} color='gray' />
               ) : (
-                <Ionicons name='ios-play-circle' size={60} color='#111' />
+                <Ionicons name='ios-play-circle' size={60} color='gray' />
               )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.control} onPress={()=>handleNextTrack()}>
-                <Text>Next</Text>
+            <AntDesign name="stepforward" size={40} color="gray" />
             </TouchableOpacity>
       </View>
 
@@ -310,7 +305,7 @@ return (
 
     </View>
     </ImageBackground>
-    </SafeAreaView>
+    </View>
 )
 }
 
@@ -323,7 +318,7 @@ container: {
   width: width,
   height: height,
   backgroundColor: 'white',
-  marginTop:70,
+  marginTop:150,
   paddingTop:40,
   borderTopStartRadius:30,
   borderTopEndRadius:30

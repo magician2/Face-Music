@@ -38,31 +38,41 @@ export default function CameraPage() {
     
   };
 
+  const changeType = ()=>{
+    if( type == Camera.Constants.Type.front){
+      setType(Camera.Constants.Type.back);
+    }
+    else{
+      setType(Camera.Constants.Type.front);
+    }
+  }
+
   function getFaceDataView() {
     if (faceData.length === 0) {
       return (
         <View style={styles.faces}>
-          <Text style={styles.faceDesc}>No faces :(</Text>
+          <Text style={styles.faceDesc}>顔が見つかりません。</Text>
+          <Text style={styles.faceDesc}>顔がカメラに撮れる状態にしてください。</Text>
         </View>
       );
     } else {
       return faceData.map((face, index) => {
         const eyesShut = face.rightEyeOpenProbability < 0.4 && face.leftEyeOpenProbability < 0.4;
         const winking = !eyesShut && (face.rightEyeOpenProbability < 0.4 || face.leftEyeOpenProbability < 0.4);
-        const smiling = face.smilingProbability > 0.7;
+        const smiling = face.smilingProbability > 0.4;
         const sad = face.smilingProbability < 0.3;
           if(smiling === true){
             kao.shift()
             kao.push('happyFace')
             
-            return <Text style={{color: 'white' ,fontSize:30}} key={'indexhappy'}>Happy</Text>
+            return 
 
           }
           else{
             kao.shift()
             kao.push('sadFace')
 
-            return  <Text style={{color: 'white' ,fontSize:30}} key={'indexsad'}>Sad</Text>
+            return  
           }
       });
     }
@@ -152,23 +162,12 @@ const Check = ()=>{
                     </Image>
                   </TouchableOpacity>
             <TouchableOpacity 
-              style={styles.front} onPress={() => {
-                setType(
-                  type === CameraType.front ? CameraType.back : CameraType.front
-                );
-              }}>
+              style={styles.front} onPress={() => 
+                changeType()
+              }>
               <Image 
               source={cameraType}></Image>
             </TouchableOpacity>
-            {/* <Button
-              title=""
-              icon="retweet"
-              onPress={() => {
-                setType(
-                  type === CameraType.back ? CameraType.front : CameraType.back
-                );
-              }}
-            /> */}
           </View>
           // <Button title="Take a picture" onPress={takePicture} icon="camera" />
         )}
@@ -179,11 +178,11 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   faces: {
-    
+    marginTop:100,
     alignItems: 'center',
   },
   faceDesc: {
-    fontSize:40,
+    fontSize:20,
     color:'white',
   },
   container: {

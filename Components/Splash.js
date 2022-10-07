@@ -19,7 +19,7 @@ export default function Splash(){
     const navigation = useNavigation();
 
     return (
-        <SafeAreaView style= {{flex:1}}>
+        <View style={{flex: 1,}}>
              <LinearGradient
                 start={{x: 0, y: 0.2}} end={{x: 0, y: 1}}
                 // Background Linear Gradient
@@ -30,7 +30,7 @@ export default function Splash(){
                 top: 0,
                 height:height}}
             />
-            <ImageBackground source={Back} style={{flex:1,alignItems: 'center',marginTop:100}}>
+            <ImageBackground source={Back} style={{flex:1,alignItems: 'center',}}>
                 <Image source={Logo} style={styles.logo}></Image>
                 <LottieView
                  source={require('../assets/line.json') } 
@@ -40,7 +40,7 @@ export default function Splash(){
                  onAnimationFinish={()=>navigation.navigate('Home')}
                  />
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     )
 }
 const width = Dimensions.get('window').width;
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     logo:{
         width:80,
         height:80,
-        marginTop: 230
+        marginTop: 330
     }
 })

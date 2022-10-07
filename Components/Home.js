@@ -43,8 +43,8 @@ export default function Home() {
                 top: 0,
                 height:height}}
             />
-                    <ImageBackground source={Back} style={{flex:1,alignItems: 'center',marginTop:100}}>
-                        <View style={{flex:1,justifyContent: 'center',paddingBottom:100}}>
+                    <ImageBackground source={Back} style={{flex:1,alignItems: 'center'}}>
+                        <View style={{flex:1,justifyContent: 'center',paddingBottom:100,marginTop:100}}>
                             <Image source={homeImage} style={{width: 300, height: 295}}></Image>
                             <Text  style={
                             { color: '#FFFFFF',fontSize:16,textAlign: 'center',lineHeight:40,fontWeight: '500',marginBottom:30,marginTop:50}
@@ -68,8 +68,8 @@ export default function Home() {
                 top: 0,
                 height:height}}
             />
-                 <ImageBackground source={Back} style={{flex:1,alignItems: 'center',marginTop:100}}>
-                        <View style={{flex:1,justifyContent: 'center',paddingBottom:100,alignItems: 'center'}}>
+                 <ImageBackground source={Back} style={{flex:1,alignItems: 'center'}}>
+                        <View style={{flex:1,justifyContent: 'center',paddingBottom:100,alignItems: 'center',marginTop:100}}>
                             <Image source={homeImage2} style={{width: 300, height: 270}}></Image>
                                 <Text  style={
                                 { color: '#FFFFFF',fontSize:16,textAlign: 'center',lineHeight:40,fontWeight: '500',marginBottom:30,marginTop:50}
