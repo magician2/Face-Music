@@ -41,7 +41,7 @@ export default function Menu () {
         if(route.params.face == 'sadFace'){
             
             return (
-            <View style={{position: 'absolute',top:140,right:100}}>
+            <View style={{position: 'absolute',top:140}}>
 
                 <Image source={sadp} style={styles.faceIconSad}></Image>
                 
@@ -144,8 +144,11 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
     },
     faceIconSad:{
-        width:30,
+        width:35,
         height:50,
+        position: 'absolute',
+        left:50,
+        top:30
     },
     faceIconHappy:{
         width:60,
